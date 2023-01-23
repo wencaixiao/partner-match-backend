@@ -1,0 +1,47 @@
+#公共配置,任何环境都会加载这个配置
+spring:
+  profiles:
+    active: dev
+  application:
+    name: partner-match-backend #项目的名称
+  #数据库的配置
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/xiaowc_partner_match?serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  #设置session的失效时间
+  session:
+    timeout: 86400
+    store-type: redis  #默认是none，表示存储在单台服务器，这里配置表示直接将session存入到redis中，表示从redis读写session
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher  #如果springboot版本大于2.6，需要修改默认路径匹配策略
+  #redis配置
+  redis:
+    port: 6379
+    host: localhost
+    database: 0  #默认使用redis的第0个数据库
+
+server:
+  port: 8080 #程序的启动端口
+  servlet:
+    context-path: /api #指定接口全局api，让后台所有请求的地址都要加上这个/api
+    session:
+      cookie:
+        #共享cookie，如果还有localhost:4000,localhost:5000,localhost:6000都要访问这个cookie，这样我们就要共享这个cookie了
+        #这样我们相当于把cookie的作用域提高到了域名级，忽略了端口
+        domain: localhost
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false #关闭下划线自动转换为驼峰
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #控制台输出日志
+  #配置逻辑删除
+  global-config:
+    db-config:
+      logic-delete-field: isDelete # 全局逻辑删除的实体字段名(since 3.3.0,配置后可以忽略不配置步骤2)
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+
+

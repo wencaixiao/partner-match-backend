@@ -1,0 +1,16 @@
+#生产环境配置:通过application.yml添加不同的后缀来区分,只有生产环境才会加载这个配置
+#先区分多环境：前端区分开发和线上接口，后端prod改为用线上公网可访问的数据库
+spring:
+  #数据库的配置
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: 'jdbc:mysql://gz-cynosdbmysql-grp-mm0hwopr.sql.tencentcdb.com:23698/user_center?useSSL=false'
+    username: root
+    password: Xwc111111
+  #设置session的失效时间
+  session:
+    timeout: 86400
+#宝塔linux启动springboot后,服务可通过localhost访问,但无法通过真是ip地址访问,原因出现在springboot自带的tomcat
+#上,可修改配置文件application.yml种server.address=0.0.0.0解决,具体原因为127.0.0.1可能会使用ipv6,修改为0.0.0.0可改为ipv4
+server:
+  address: 0.0.0.0
