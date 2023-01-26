@@ -7,9 +7,9 @@ spring:
   #数据库的配置
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/xiaowc_partner_match?serverTimezone=Asia/Shanghai
+    url: xxxxxx
     username: root
-    password: 123456
+    password: xxxxxx
   #设置session的失效时间
   session:
     timeout: 86400
