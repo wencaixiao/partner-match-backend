@@ -31,8 +31,8 @@ public class SwaggerConfig {
 
     @Bean(value = "defaultApi2")
     public Docket createRestApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
+        return new Docket(DocumentationType.SWAGGER_2)  // 指定swagger的版本
+                .apiInfo(apiInfo())  // 就是下面定义的这个方法
                 .select()
                 // 这里一定要标注你控制器的位置
                 .apis(RequestHandlerSelectors.basePackage("com.xiaowc.partnermatch.controller")) // 生成接口文档的位置

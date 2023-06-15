@@ -393,6 +393,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
                 // (1)查询已加入队伍的所有用户和加入时间
                 QueryWrapper<UserTeam> userTeamQueryWrapper = new QueryWrapper<>();
                 userTeamQueryWrapper.eq("teamId", teamId);
+                // 不需要查询全部已加入队伍的信息，只需查询前面两个人即可，队长退出，第二个人接管
                 userTeamQueryWrapper.last("order by id asc limit 2"); // 在SQL语句的最后面拼接SQL语句
                 List<UserTeam> userTeamList = userTeamService.list(userTeamQueryWrapper); // 查询到两条数据
                 if (CollectionUtils.isEmpty(userTeamList) || userTeamList.size() <= 1) {

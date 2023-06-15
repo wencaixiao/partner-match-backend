@@ -18,8 +18,14 @@ import org.springframework.context.annotation.Configuration;
 @Data // 为host和port生成get和set方法
 public class RedissonConfig {
 
+    /**
+     * 对应application.yml中的字段名
+     */
     private String host;
 
+    /**
+     * 对应application.yml中的字段名
+     */
     private String port;
 
     @Bean

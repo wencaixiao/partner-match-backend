@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-@RestController // 适用于编写restful风格的api，返回值默认为json类型
+@RestController // 适用于编写restful风格的api，返回值默认为json类型，等价于@Controller+@ResponseBody
 @RequestMapping("/user")
 // 这个注解的作用是允许跨域，默认允许的域名是*，所有域名都允许跨域，可以通过origins来选择允许跨域的地址
 @Slf4j
@@ -217,7 +217,7 @@ public class UserController {
      */
     // TODO: 2023/1/12 推荐多个，未实现
     @GetMapping("/recommend")
-    public BaseResponse<Page<User>> recommedUsers(long pageSize, long pageNum, HttpServletRequest request) {
+    public BaseResponse<Page<User>> recommendUsers(long pageSize, long pageNum, HttpServletRequest request) {
         // 首先得到当前登录的用户
         User loginUser = userService.getLoginUser(request);
         // 因为不同用户看到的数据不同，所以需要传入用户的key来进行区分，这里我们使用：xiaowc:user:recommend:userId

@@ -43,7 +43,7 @@ public class InsertUsers {
     public void doInsertUsers() {
         StopWatch stopWatch = new StopWatch(); // 记录插入1000条数据需要多长时间
         System.out.println("goodgoodgood");
-        stopWatch.start();
+        stopWatch.start(); // 记录开始时间
         final int INSERT_NUM = 100000;
         // for循环插入数据的问题：时间很慢
         //  1.建立和释放数据库连接(批量查询解决)
@@ -67,7 +67,7 @@ public class InsertUsers {
             userList.add(user); // 先将数据放入到list集合中，后续进行批量插入
         }
         userService.saveBatch(userList, 10000); // 批量插入，每次插入100条数据
-        stopWatch.stop();
+        stopWatch.stop(); // 记录结束时间
         System.out.println(stopWatch.getTotalTimeMillis());
     }
 

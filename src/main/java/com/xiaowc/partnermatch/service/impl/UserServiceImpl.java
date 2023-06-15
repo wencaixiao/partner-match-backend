@@ -229,6 +229,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         /**
         // 方式一：SQL查询(实现简单，可以通过拆分查询进一步优化)
+        //根据模糊查询来查，like '%java%' and like 'C++'; like拼接的字符串越长查询就越慢
         QueryWrapper<User> queryWrapper = new QueryWrapper<>(); // 定义查询条件，模糊查询
         // 拼接and查询
         // like '%java%' and like '%Python%'
@@ -239,6 +240,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return userList.stream().map(this::getSafetyUser).collect(Collectors.toList()); // 返回脱敏后的用户列表
          */
         // 方式二：内存查询
+        //先查询所有对象到内存中，再将内存中的所有对象中的tag标签和穿过来的tag进行比较
         // 解析JSON字符串：
         //   序列化：Java对象转成JSON字符串。
         //   反序列化：把JSON字符串转成Java对象
@@ -254,7 +256,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 2.在内存中判断是否包含要求的标签
         // 如果要并行查询，就将stream()改成parallelStream()，他用的是一个公共线程池，有一定的风险，可能拿不到线程，会被其他程序占用
         return userList.stream().filter(user -> { // 遍历每一个User，用filter来代替for循环，是false就过滤掉，是true就保留
-            String tagsStr = user.getTags();
+            String tagsStr = user.getTags(); // json字符串
             Set<String> tempTagNameSet = gson.fromJson(tagsStr, new TypeToken<Set<String>>() {}.getType()); // 将JSON字符串反序列化成一个对象
             // 用ofNullable()去封装一个可能为空的对象，再用orElse()给对象一个默认值，也就是说如果tempTagNameList为空，则取的值就是默认值new HashSet<>()的值
             tempTagNameSet = Optional.ofNullable(tempTagNameSet).orElse(new HashSet<>());
@@ -392,7 +394,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 取出topUserPairList中的key里面的id(也就是用户信息)，并把他转换成新的列表，这里已经排好序了
         // 原本按顺序排列的用户列表
         List<Long> userIdList = topUserPairList.stream().map(pair -> pair.getKey().getId()).collect(Collectors.toList());
-        // 上面知识从数据库中查询了两个字段id和tags，所以我们还需要从数据库中查询一次符合条件的用户的全部信息
+        // 上面只是从数据库中查询了两个字段id和tags，所以我们还需要从数据库中查询一次符合条件的用户的全部信息
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.in("id", userIdList); // 这里在列表中查询是没有顺序的，所以返回的结果也没有顺序
         // 1, 3, 2
